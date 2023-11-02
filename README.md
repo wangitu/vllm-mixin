@@ -41,7 +41,7 @@ To mixin auto_gptq, ensure that **auto_gptq** (Refer to either [AutoGPTQ](https:
 2. Flexible model loading strategy. You could specify `device_map` and `max_memory` to **achieve highly customized model parallelism** regardless of VLLM's "first GPU first" placement strategy.
 
 <details>
-  <summary>Advance usages (click to expand)</summary>
+  <summary>Advanced usages (click to expand)</summary>
 
 ```Python
 def enable_gptq_support(
