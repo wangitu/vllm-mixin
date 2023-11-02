@@ -15,6 +15,8 @@
 *Latest News* 🔥
 - [2023/11] We initially released VLLM-Mixin.
 
+---
+
 ## Installation
 
 ### Prerequisites
@@ -35,8 +37,8 @@ pip install -v -e .
 ### auto_gptq
 To mixin auto_gptq, ensure that **auto_gptq** (Refer to either [AutoGPTQ](https://github.com/PanQiWei/AutoGPTQ) or [unpadded-AutoGPTQ](https://github.com/wangitu/unpadded-AutoGPTQ)) is installed. Once auto_gptq is activated:
 
-1. Unleash the full potential of auto_gptq through just a single line of code: `enable_gptq_support()`. This seamless integration with VLLM allows you to **freely configure the quantized model via arguments specification**. 
-2. Flexible model loading strategy. You could specify `device_map` and `max_memory` to **achieve highly customized model parallelism**.
+1. Unleash the full potential of auto_gptq through just a single line of code: `enable_gptq_support()`. This seamless integration with VLLM allows you to **freely configure the quantized model via arguments specification** while reserving VLLM's state-of-the-art serving throughput. 
+2. Flexible model loading strategy. You could specify `device_map` and `max_memory` to **achieve highly customized model parallelism** regardless of VLLM's "first GPU first" placement strategy.
 
 <details>
   <summary>Advance usages (click to expand)</summary>
@@ -82,7 +84,7 @@ def enable_gptq_support(
 
 </details>
 
-### TODO
+### todo
 
 
 ## Quick start
@@ -136,4 +138,4 @@ if __name__ == '__main__':
     fire.Fire(main)
 ```
 
-### TODO
+### todo
