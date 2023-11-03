@@ -103,8 +103,8 @@ from vllm_mixin.gptq import enable_gptq_support
 
 
 texts = [
-    "<|im_start|>### Instruction:\n你是谁？\n\n### Response:\n",
-    "<|im_start|>### Instruction:\n什么是做多？什么是做空？\n\n### Response:\n"
+    "### Instruction:\n迪士尼有哪些知名的动画形象？\n\n### Response:\n",
+    "### Instruction:\n什么是做多？什么是做空？\n\n### Response:\n"
 ]
 
 
@@ -112,12 +112,11 @@ def main(
     quantized_model_dir: str,
     custom_text: str = None
 ):
+    # one line to activate auto_gptq support
     enable_gptq_support(device_map={'': 0})
     
     tokenizer = AutoTokenizer.from_pretrained(quantized_model_dir, use_fast=False, trust_remote_code=True)
-    tokenizer.pad_token = tokenizer.eos_token = '<|endoftext|>'
-    tokenizer.padding_side = 'left'
-    
+  
     model = LLM(quantized_model_dir, trust_remote_code=True, seed=42)
     
     global texts
@@ -125,7 +124,7 @@ def main(
         texts = [custom_text]
         
     sampling_params = SamplingParams(
-        temperature=1.0, top_k=50, top_p=0.8, max_tokens=1024, stop_token_ids=[tokenizer.eos_token_id]
+        temperature=1.0, top_k=50, top_p=0.8, max_tokens=2048, stop_token_ids=[tokenizer.eos_token_id]
     )
     
     outputs = model.generate(texts, sampling_params=sampling_params)
