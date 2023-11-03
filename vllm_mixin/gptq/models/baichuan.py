@@ -4,7 +4,7 @@
 # https://huggingface.co/baichuan-inc/Baichuan2-13B-Base/blob/main/modeling_baichuan.py
 # Copyright (c) Baichuan Intelligent Technology.
 # LICENSE: https://huggingface.co/baichuan-inc/Baichuan2-13B-Base/blob/main/Baichuan2%20%E6%A8%A1%E5%9E%8B%E7%A4%BE%E5%8C%BA%E8%AE%B8%E5%8F%AF%E5%8D%8F%E8%AE%AE.pdf
-"""Inference-only QWen model compatible with HuggingFace weights.
+"""Inference-only Baichuan model compatible with HuggingFace weights.
 
 The input of the model is flattened to a 1D tensor of tokens. The model uses
 InputMetadata to extract the original 2D shape of the input.
@@ -29,11 +29,10 @@ from vllm.model_executor.weight_utils import (
     convert_pyslice_to_tensor,
     hf_model_weights_iterator
 )
-from vllm.model_executor.parallel_utils.parallel_state import (
-    get_tensor_model_parallel_world_size,
-)
 from vllm.sequence import SamplerOutput
 from vllm.transformers_utils.configs.baichuan import BaiChuanConfig
+
+from .base import GPTQForCausalLM
 
 KVCache = Tuple[torch.Tensor, torch.Tensor]
 
@@ -252,13 +251,14 @@ class BaichuanModel(nn.Module):
         return hidden_states
     
     
-class BaichuanBaseForCausalLM(nn.Module):
+class BaichuanBaseForCausalLM(nn.Module, GPTQForCausalLM):
     layer_type: str = "BaichuanLayer"
     lm_head_name: str = "lm_head"
     outside_layer_modules: List[str] = ["model.embed_tokens", "model.norm"]
     
     def __init__(self, config, position_embedding: str):
         super().__init__()
+        GPTQForCausalLM.__init__(self)
         self.config = config
         self.model = BaichuanModel(config, position_embedding)
         self.lm_head = nn.Linear(

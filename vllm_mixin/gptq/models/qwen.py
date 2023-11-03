@@ -24,11 +24,10 @@ from vllm.model_executor.weight_utils import (
     convert_pyslice_to_tensor,
     hf_model_weights_iterator
 )
-from vllm.model_executor.parallel_utils.parallel_state import (
-    get_tensor_model_parallel_world_size,
-)
 from vllm.sequence import SamplerOutput
 from vllm.transformers_utils.configs.qwen import QWenConfig
+
+from.base import GPTQForCausalLM
 
 KVCache = Tuple[torch.Tensor, torch.Tensor]
 
@@ -164,10 +163,6 @@ class QWenBlock(nn.Module):
 class QWenModel(nn.Module):
     def __init__(self, config: QWenConfig):
         super().__init__()
-        
-        tensor_model_parallel_world_size = get_tensor_model_parallel_world_size()
-        assert tensor_model_parallel_world_size == 1, "Tensor model parallel is not compatible with GPTQ, please set `tensor_parallel_size = 1`"
-        
         self.config = config
         self.vocab_size = config.vocab_size
 
@@ -205,13 +200,14 @@ class QWenModel(nn.Module):
         return hidden_states
 
 
-class QWenLMHeadModel(nn.Module):
+class QWenLMHeadModel(nn.Module, GPTQForCausalLM):
     layer_type: str = "QWenBlock"
     lm_head_name: str = "lm_head"
     outside_layer_modules: List[str] = ["transformer.wte", "transformer.wpe", "transformer.ln_f", "transformer.visual"]
     
     def __init__(self, config: QWenConfig):
         super().__init__()
+        GPTQForCausalLM.__init__(self)
         self.config = config
         self.transformer = QWenModel(config)
         self.lm_head = nn.Linear(
