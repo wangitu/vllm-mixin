@@ -1,9 +1,9 @@
 # coding=utf-8
 # author=Qainle Wang
 # Adapted from
-# https://huggingface.co/Qwen/Qwen-7B/blob/main/modeling_qwen.py
+# https://huggingface.co/Qwen/Qwen-14B/blob/main/modeling_qwen.py
 # Copyright (c) Alibaba Cloud.
-# LICENSE: https://huggingface.co/Qwen/Qwen-7B/blob/main/LICENSE
+# LICENSE: https://huggingface.co/Qwen/Qwen-14B/blob/main/LICENSE
 """Inference-only QWen model compatible with HuggingFace weights.
 
 The input of the model is flattened to a 1D tensor of tokens. The model uses
@@ -172,8 +172,7 @@ class QWenModel(nn.Module):
         self.vocab_size = config.vocab_size
 
         self.wte = nn.Embedding(
-            self.vocab_size,
-            config.hidden_size,
+            self.vocab_size, config.hidden_size
         )
         self.h = nn.ModuleList(
             [QWenBlock(config) for _ in range(config.num_hidden_layers)]
@@ -207,7 +206,6 @@ class QWenModel(nn.Module):
 
 
 class QWenLMHeadModel(nn.Module):
-    
     layer_type: str = "QWenBlock"
     lm_head_name: str = "lm_head"
     outside_layer_modules: List[str] = ["transformer.wte", "transformer.wpe", "transformer.ln_f", "transformer.visual"]

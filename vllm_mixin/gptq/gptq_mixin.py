@@ -7,6 +7,7 @@ from vllm.model_executor.model_loader import _MODEL_REGISTRY
 from vllm.worker import worker
 
 from .models.qwen import QWenLMHeadModel
+from .models.baichuan import BaichuanForCausalLM, BaiChuanForCausalLM
 from .quantization_utils import get_model, bool_to_env
 
 
@@ -30,7 +31,11 @@ def enable_gptq_support(
     max_memory: Optional[Dict] = None
 ):
     _old_modules.append(("QWenLMHeadModel", _MODEL_REGISTRY.get("QWenLMHeadModel")))
+    _old_modules.append(("BaichuanForCausalLM", _MODEL_REGISTRY.get("BaichuanForCausalLM")))
+    _old_modules.append(("BaiChuanForCausalLM", _MODEL_REGISTRY.get("BaiChuanForCausalLM")))
     _MODEL_REGISTRY["QWenLMHeadModel"] = QWenLMHeadModel
+    _MODEL_REGISTRY["BaichuanForCausalLM"] = BaichuanForCausalLM
+    _MODEL_REGISTRY["BaiChuanForCausalLM"] = BaiChuanForCausalLM
     
     worker.get_model = get_model
     

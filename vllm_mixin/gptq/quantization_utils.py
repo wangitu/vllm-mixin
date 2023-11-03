@@ -107,8 +107,8 @@ def post_load_checkpoint(model: nn.Module):
             if isinstance(module, PagedAttentionWithRoPE):
                 module.rotary_emb.cos_sin_cache = module.rotary_emb.cos_sin_cache.to(device)
             else:
-                # TODO: PagedAttentionWithALiBi
-                pass
+                module.alibi_slopes = module.alibi_slopes.to(device)
+                
             torch.cuda.empty_cache()
             return
         
