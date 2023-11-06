@@ -84,12 +84,20 @@ def enable_gptq_support(
 
 </details>
 
+### smart_server
+With smart_server, you can **effortlessly build a lightning-fast server**, powered by the VLLM engine. We provide:
+
+1. A load balancer to **smartly dispatch user requests to different slave servers**.
+2. Serving which is capable of **responding to batch requests in a streaming manner**, unleashing the full efficiency of the VLLM
+
+[Usages](#smart_sevrer)
+
 ### todo
 
 
 ## Quick start
 
-### auto_gptq (see ./gptq_example.py)
+### auto_gptq (see examples/test_gptq.py)
 Below is an example of activating auto_gptq in VLLM for lower memory usage and faster inference:
 ```Python
 import sys
@@ -136,5 +144,19 @@ def main(
 if __name__ == '__main__':
     fire.Fire(main)
 ```
+
+### <a id="smart_server"></a>smart_server
+
+To experience smart and lightning-fast serving, follow the steps below:
+
+1. Start the load balancer: `python -m vllm_mixin.smart_server.load_balancer`
+2. Initiate several serving individually:
+    ```Bash
+    CUDA_VISIBLE_DEVICES=0 python -m vllm_mixin.smart_server.api_server --model <your model> --host 127.0.0.1 --port 8000
+    CUDA_VISIBLE_DEVICES=1 python -m vllm_mixin.smart_server.api_server --model <your model> --host 127.0.0.1 --port 8001
+    ...
+    ```
+    In the script above, use `host` to specify the server's host, `port` to designate the port. The remaining parameters (such as `model`) are consistent with VLLM's `EngineArgs`
+3. **(Optional)** Test the server with: `python test_client.py` (see examples/test_gptq.py)
 
 ### todo
