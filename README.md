@@ -90,7 +90,7 @@ With smart_server, you can **effortlessly build a lightning-fast server**, power
 1. A load balancer to **smartly dispatch user requests to different slave servers**.
 2. Serving which is capable of **responding to batch requests in a streaming manner**, unleashing the full efficiency of the VLLM.
 
-[Usages](#smart_sevrer)
+[Usages](#smart_server)
 
 ### todo
 
