@@ -156,7 +156,7 @@ To experience smart and lightning-fast serving, follow the steps below:
     CUDA_VISIBLE_DEVICES=1 python -m vllm_mixin.smart_server.api_server --model <your model> --host 127.0.0.1 --port 8001
     ...
     ```
-    In the script above, use `host` to specify the server's host, `port` to designate the port. The remaining parameters (such as `model`) are consistent with VLLM's `EngineArgs`
+    In the script above, use `host` to specify the server's host, `port` to designate the port. The remaining parameters (such as `model`) are consistent with VLLM's `EngineArgs`.
 3. **(Optional)** Test the server with: `python test_client.py` (see examples/test_client.py)
 
 ### todo
