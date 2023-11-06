@@ -90,7 +90,7 @@ With smart_server, you can **effortlessly build a lightning-fast server**, power
 1. A load balancer to **smartly dispatch user requests to different slave servers**.
 2. Serving which is capable of **responding to batch requests in a streaming manner** and unleashing the full efficiency of the VLLM.
 
-[Usages](#smart_server)
+[Usages](#smartserver)
 
 ### todo
 
@@ -145,7 +145,7 @@ if __name__ == '__main__':
     fire.Fire(main)
 ```
 
-### <a id="smart_server"></a>smart_server
+### <a id="smartserver"></a>smart_server
 
 To experience smart and lightning-fast serving, follow the steps below:
 
