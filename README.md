@@ -85,10 +85,10 @@ def enable_gptq_support(
 </details>
 
 ### smart_server
-With smart_server, you can **effortlessly build a lightning-fast server**, powered by the VLLM engine. We provide:
+With smart_server, you can **effortlessly build a lightning-fast server**, powered by VLLM engine. We provide:
 
 1. A load balancer to **smartly dispatch user requests to different slave servers**.
-2. Serving which is capable of **responding to batch requests in a streaming manner** and unleashing the full efficiency of the VLLM.
+2. Serving which is capable of **responding to batch requests in a streaming manner** and unleashing the full efficiency of VLLM.
 
 [Usages](#smartserver)
 
