@@ -1,7 +1,7 @@
 import os
 import sys
 from pathlib import Path
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, find_namespace_packages
 
 
 def readme():
@@ -12,7 +12,7 @@ def readme():
 
 common_setup_kwargs = {
     "name": "vllm_mixin",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "author": "Qianle Wang",
     "author_email": "wql20000111@stu.sufe.edu.cn",
     "description": "An easy mixin with just a single line of code to seamlessly integrate powerful functionalities into VLLM.",
@@ -41,7 +41,8 @@ extras_require = {
 }
 
 setup(
-    packages=find_packages(),
+    packages=find_namespace_packages(exclude=["assets"]),
+    package_data={"": ["*.yaml", "*.txt"]},
     install_requires=requirements,
     extras_require=extras_require,
     python_requires=">=3.8",

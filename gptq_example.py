@@ -9,7 +9,7 @@ from vllm_mixin.gptq import enable_gptq_support
 
 
 texts = [
-    "### Instruction:\n迪士尼有哪些知名的动画形象？\n\n### Response:\n",
+    "### Instruction:\n迪士尼有哪些知名动画形象？\n\n### Response:\n",
     "### Instruction:\n什么是做多？什么是做空？\n\n### Response:\n"
 ]
 
