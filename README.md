@@ -88,7 +88,7 @@ def enable_gptq_support(
 With smart_server, you can **effortlessly build a lightning-fast server**, powered by the VLLM engine. We provide:
 
 1. A load balancer to **smartly dispatch user requests to different slave servers**.
-2. Serving which is capable of **responding to batch requests in a streaming manner**, unleashing the full efficiency of the VLLM
+2. Serving which is capable of **responding to batch requests in a streaming manner**, unleashing the full efficiency of the VLLM.
 
 [Usages](#smart_sevrer)
 
@@ -157,6 +157,6 @@ To experience smart and lightning-fast serving, follow the steps below:
     ...
     ```
     In the script above, use `host` to specify the server's host, `port` to designate the port. The remaining parameters (such as `model`) are consistent with VLLM's `EngineArgs`
-3. **(Optional)** Test the server with: `python test_client.py` (see examples/test_gptq.py)
+3. **(Optional)** Test the server with: `python test_client.py` (see examples/test_client.py)
 
 ### todo
