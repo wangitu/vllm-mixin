@@ -71,7 +71,7 @@ async def batch_stream_generate(request: Request) -> Response:
     if len(sampling_params) < len(batch):
         for _ in range(len(batch) - len(sampling_params)):
             sampling_params.append(
-                SamplingParams(temperature=1.0, top_k=50, top_p=0.8, max_tokens=2048, stop=get_stop())
+                SamplingParams(temperature=1.0, top_k=50, top_p=0.8, max_tokens=2048, stop=get_stop(args))
             )
     sampling_params = sampling_params[:len(batch)]
          
