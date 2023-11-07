@@ -58,6 +58,8 @@ class QueryProcessor:
             if chunk:
                 data = json.loads(chunk.decode("utf-8"))
                 for ret in data:
+                    if ret["req_id"] == "unaccessible":
+                        continue
                     result_queue = result_queues[id2req[ret["req_id"]]]
                     await result_queue.put(ret["text"])
                     if ret["finished"]:
@@ -109,8 +111,6 @@ async def test(shuffle: bool=False):
     questions = [line.strip() for line in lines]
     
     if shuffle:
-        import random
-        
         random.shuffle(questions)
     
     first_question = questions[0]

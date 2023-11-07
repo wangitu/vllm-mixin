@@ -85,7 +85,7 @@ async def batch_stream_generate(request: Request) -> Response:
         streams.append(stream)
         
     async def stream_results() -> AsyncGenerator[bytes, None]:
-        rets = [None for _ in range(len(streams))]
+        rets = [{} for _ in range(len(streams))]
         finished = [False] * len(streams)
         while True:
             for i, stream in enumerate(streams):
@@ -94,6 +94,8 @@ async def batch_stream_generate(request: Request) -> Response:
                 try:
                     request_output = await anext(stream)
                 except StopAsyncIteration:
+                    if not rets[i]:
+                        rets[i]["req_id"] = "unaccessible"
                     finished[i] = True
                     rets[i]["finished"] = True
                     continue
