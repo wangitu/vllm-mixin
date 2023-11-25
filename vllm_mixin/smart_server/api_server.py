@@ -134,13 +134,13 @@ async def report_heartbeat():
     load_balancer_addr = get_load_balancer_addr()
     local_addr = get_local_addr()
 
-    while True:
-        await asyncio.sleep(TIMEOUT_TO_REPORT_HEARTBEAT)
-        
-        num_requests = len(engine._request_tracker._request_streams) + \
-                    engine._request_tracker._new_requests.qsize() - \
-                    engine._request_tracker._finished_requests.qsize()
-        async with aiohttp.ClientSession(headers={"User-Agent": "Test report heartbeat"}) as session:
+    async with aiohttp.ClientSession(headers={"User-Agent": "Test report heartbeat"}) as session:
+        while True:
+            await asyncio.sleep(TIMEOUT_TO_REPORT_HEARTBEAT)
+            
+            num_requests = len(engine._request_tracker._request_streams) + \
+                        engine._request_tracker._new_requests.qsize() - \
+                        engine._request_tracker._finished_requests.qsize()
             try:
                 await session.post(
                     url=load_balancer_addr,
