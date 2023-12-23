@@ -85,7 +85,7 @@ def enable_gptq_support(
 
 </details>
 
-### smart_server [switch to the develop branch first]
+### smart_server
 With smart_server, you can **effortlessly build a lightning-fast server**, powered by VLLM engine. We provide:
 
 1. A load balancer to **smartly dispatch user requests to different slave servers**.
@@ -146,7 +146,7 @@ if __name__ == '__main__':
     fire.Fire(main)
 ```
 
-### <a id="smartserver"></a>smart_server [switch to the develop branch first]
+### <a id="smartserver"></a>smart_server
 
 To experience smart and lightning-fast serving, follow the steps below:
 
