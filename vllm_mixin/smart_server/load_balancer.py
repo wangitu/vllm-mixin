@@ -24,7 +24,6 @@ api_urls = {} # 从节点的 api: num_request
 concurrency = 50  # 并发queries数量
 wait_period = 1  # 等待时间
 
-logger = None
 queries_queue = asyncio.Queue()
 sentinel = object()
 
@@ -34,7 +33,6 @@ class QueryProcessor:
     async def process(queries: List[Tuple]):
         batch, histories, decoding_args, result_queues = zip(*queries)
         
-        headers = {"User-Agent": "Test load balancer"}
         id2req = {str(uuid.uuid4().hex): i for i in range(len(batch))}
         pload = {
             "batch": batch,
@@ -50,21 +48,17 @@ class QueryProcessor:
         logging.info("available api uris:\n" + '\t'.join(map(lambda x: f"{x[0]}: {x[1]}", api_urls.items())))
         logging.info(f"dispatch to: {api_url}\n")
         
-        response = requests.post(api_url, headers=headers, json=pload, stream=True)
-        
-        for chunk in response.iter_lines(
-            chunk_size=8192, decode_unicode=False, delimiter=b"\0"
-        ):
-            if chunk:
-                data = json.loads(chunk.decode("utf-8"))
-                for ret in data:
-                    if ret["req_id"] == "unaccessible":
-                        continue
-                    result_queue = result_queues[id2req[ret["req_id"]]]
-                    await result_queue.put(ret["text"])
-                    if ret["finished"]:
-                        await result_queue.put(sentinel)
-                    await asyncio.sleep(0)
+        async with aiohttp.ClientSession() as session:
+            response = session.post(api_url, json=pload)
+            async for chunk in response.content.iter_chunked(8192):
+                if chunk:
+                    data = json.loads(chunk.decode("utf-8").rstrip('\x00'))
+                    for ret in data:
+                        result_queue = result_queues[id2req[ret["req_id"]]]
+                        await result_queue.put(ret["text"])
+                        if ret["finished"]:
+                            await result_queue.put(sentinel)
+                        await asyncio.sleep(0)
 
 
 async def decoding_arguments(temperature: float=1.0, top_k: int=50, top_p:float=0.8, max_tokens: int=2048):
@@ -154,11 +148,9 @@ async def process_queries():
             asyncio.create_task(QueryProcessor.process(chunk))
 
 
-# 启动时开始初始化 logger, 运行 process_queries 任务, 监听心跳
+# 启动时开始初始化 logging, 运行 process_queries 任务, 监听心跳
 @app.on_event("startup")
 async def startup_event():
-    global logger
-    
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s',
