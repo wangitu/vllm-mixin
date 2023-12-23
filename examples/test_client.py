@@ -15,24 +15,31 @@ def clear_line(n: int = 1) -> None:
         print(LINE_UP, end=LINE_CLEAR, flush=True)
 
 
-def get_stream_http_request(
+def post_stream_http_request(
+    api: str,
     prompt: str,
-    api_url: str,
+    history=None,
     temperature: float=1.0,
     top_k: int=50,
     top_p: float=0.8,
     max_tokens: int=2048
 ) -> requests.Response:
-    headers = {"User-Agent": "Test Client"}
-    history = [("中国的首都是哪里？", "中国的首都是北京。")]
-    history = urllib.parse.quote(json.dumps(history))
-    api = f"{api_url}?query={prompt}&history={history}&temperature={temperature}&top_k={top_k}&top_p={top_p}&max_tokens={max_tokens}"
     print(f"test api: {api}")
-    response = requests.get(api, headers=headers, stream=True)
+    pdata = {
+        "query": prompt,
+        "history": history,
+        "decoding_args": {
+            "temperature": temperature,
+            "top_k": top_k,
+            "top_p": top_p,
+            "max_tokens": max_tokens
+        }
+    }
+    response = requests.post(api, json=pdata, stream=True)
     return response
 
 
-def get_streaming_response(response: requests.Response) -> Iterable[List[str]]:
+def post_streaming_response(response: requests.Response) -> Iterable[List[str]]:
     for chunk in response.iter_lines(
         chunk_size=8192,
         decode_unicode=False,
@@ -56,13 +63,17 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     prompt = args.prompt
-    api_url = f"http://{args.host}:{args.port}/generate"
+    api = f"http://{args.host}:{args.port}/generate"
 
     print(f"Prompt: {prompt!r}\n", flush=True)
-    response = get_stream_http_request(prompt, api_url, args.temperature, args.top_k, args.top_p, args.max_tokens)
+    response = post_stream_http_request(
+        api, prompt,
+        [("中国的首都是哪里？", "中国的首都是北京。")],
+        args.temperature, args.top_k, args.top_p, args.max_tokens
+    )
 
     num_printed_lines = 0
-    for h in get_streaming_response(response):
+    for h in post_streaming_response(response):
         clear_line(num_printed_lines)
         num_printed_lines = 0
         for i, line in enumerate(h):

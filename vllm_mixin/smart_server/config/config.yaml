@@ -1,0 +1,9 @@
+APIServer:
+  intervalReportHeartbeat: 2 # 每隔若干秒向 LoadBalancer 报告自己的状态（正在和即将处理的请求数量）
+
+LoadBalancer:
+  host: 127.0.0.1
+  port: 8080
+  heartbeatApi: /stats/report-heartbeat # 接收 APIServer 报告状态的接口
+  concurrency: 50  # 并发处理 queries 的数量
+  waitPeriod: 1 # 每若干秒处理一批 queries

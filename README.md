@@ -13,7 +13,8 @@
 ---
 
 *Latest News* 🔥
-- [2023/11] We initially released VLLM-Mixin.
+- [2023/11] We initially released VLLM-Mixin: add gptq support.
+- [2023/12] New functionality: smart_server.
 
 ---
 
